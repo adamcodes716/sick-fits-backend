@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/adamcodes716-396934/sick-fits/dev
-# timestamp: Thu Sep 10 2020 16:38:08 GMT-0400 (Eastern Daylight Time)
+# timestamp: Tue Sep 15 2020 07:59:05 GMT-0400 (Eastern Daylight Time)
 
 type AggregateItem {
   count: Int!
@@ -23,7 +23,7 @@ type Item implements Node {
   image: String
   largeImage: String
   price: Int!
-  createdAt: DateTime!
+  createAt: DateTime!
   updatedAt: DateTime!
 }
 
@@ -68,8 +68,8 @@ enum ItemOrderByInput {
   largeImage_DESC
   price_ASC
   price_DESC
-  createdAt_ASC
-  createdAt_DESC
+  createAt_ASC
+  createAt_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
@@ -81,7 +81,7 @@ type ItemPreviousValues {
   image: String
   largeImage: String
   price: Int!
-  createdAt: DateTime!
+  createAt: DateTime!
   updatedAt: DateTime!
 }
 
@@ -371,28 +371,28 @@ input ItemWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Int
-  createdAt: DateTime
+  createAt: DateTime
 
   """All values that are not equal to given value."""
-  createdAt_not: DateTime
+  createAt_not: DateTime
 
   """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
+  createAt_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
+  createAt_not_in: [DateTime!]
 
   """All values less than the given value."""
-  createdAt_lt: DateTime
+  createAt_lt: DateTime
 
   """All values less than or equal the given value."""
-  createdAt_lte: DateTime
+  createAt_lte: DateTime
 
   """All values greater than the given value."""
-  createdAt_gt: DateTime
+  createAt_gt: DateTime
 
   """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
+  createAt_gte: DateTime
   updatedAt: DateTime
 
   """All values that are not equal to given value."""
@@ -469,6 +469,15 @@ type PageInfo {
   endCursor: String
 }
 
+enum Permission {
+  ADMIN
+  USER
+  ITEMCREATE
+  ITEMUPDATE
+  ITEMDELETE
+  PERMISSIONUPDATE
+}
+
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item]!
@@ -493,7 +502,10 @@ type User implements Node {
   id: ID!
   name: String!
   email: String!
-  adam: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: [Permission!]!
 }
 
 """A connection to a list of items."""
@@ -510,7 +522,14 @@ input UserCreateInput {
   id: ID
   name: String!
   email: String!
-  adam: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: UserCreatepermissionsInput
+}
+
+input UserCreatepermissionsInput {
+  set: [Permission!]
 }
 
 """An edge in a connection."""
@@ -529,15 +548,22 @@ enum UserOrderByInput {
   name_DESC
   email_ASC
   email_DESC
-  adam_ASC
-  adam_DESC
+  password_ASC
+  password_DESC
+  resetToken_ASC
+  resetToken_DESC
+  resetTokenExpiry_ASC
+  resetTokenExpiry_DESC
 }
 
 type UserPreviousValues {
   id: ID!
   name: String!
   email: String!
-  adam: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: [Permission!]!
 }
 
 type UserSubscriptionPayload {
@@ -582,13 +608,23 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   name: String
   email: String
-  adam: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: UserUpdatepermissionsInput
 }
 
 input UserUpdateManyMutationInput {
   name: String
   email: String
-  adam: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: UserUpdatepermissionsInput
+}
+
+input UserUpdatepermissionsInput {
+  set: [Permission!]
 }
 
 input UserWhereInput {
@@ -720,48 +756,129 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
-  adam: String
+  password: String
 
   """All values that are not equal to given value."""
-  adam_not: String
+  password_not: String
 
   """All values that are contained in given list."""
-  adam_in: [String!]
+  password_in: [String!]
 
   """All values that are not contained in given list."""
-  adam_not_in: [String!]
+  password_not_in: [String!]
 
   """All values less than the given value."""
-  adam_lt: String
+  password_lt: String
 
   """All values less than or equal the given value."""
-  adam_lte: String
+  password_lte: String
 
   """All values greater than the given value."""
-  adam_gt: String
+  password_gt: String
 
   """All values greater than or equal the given value."""
-  adam_gte: String
+  password_gte: String
 
   """All values containing the given string."""
-  adam_contains: String
+  password_contains: String
 
   """All values not containing the given string."""
-  adam_not_contains: String
+  password_not_contains: String
 
   """All values starting with the given string."""
-  adam_starts_with: String
+  password_starts_with: String
 
   """All values not starting with the given string."""
-  adam_not_starts_with: String
+  password_not_starts_with: String
 
   """All values ending with the given string."""
-  adam_ends_with: String
+  password_ends_with: String
 
   """All values not ending with the given string."""
-  adam_not_ends_with: String
+  password_not_ends_with: String
+  resetToken: String
+
+  """All values that are not equal to given value."""
+  resetToken_not: String
+
+  """All values that are contained in given list."""
+  resetToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  resetToken_not_in: [String!]
+
+  """All values less than the given value."""
+  resetToken_lt: String
+
+  """All values less than or equal the given value."""
+  resetToken_lte: String
+
+  """All values greater than the given value."""
+  resetToken_gt: String
+
+  """All values greater than or equal the given value."""
+  resetToken_gte: String
+
+  """All values containing the given string."""
+  resetToken_contains: String
+
+  """All values not containing the given string."""
+  resetToken_not_contains: String
+
+  """All values starting with the given string."""
+  resetToken_starts_with: String
+
+  """All values not starting with the given string."""
+  resetToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  resetToken_ends_with: String
+
+  """All values not ending with the given string."""
+  resetToken_not_ends_with: String
+  resetTokenExpiry: String
+
+  """All values that are not equal to given value."""
+  resetTokenExpiry_not: String
+
+  """All values that are contained in given list."""
+  resetTokenExpiry_in: [String!]
+
+  """All values that are not contained in given list."""
+  resetTokenExpiry_not_in: [String!]
+
+  """All values less than the given value."""
+  resetTokenExpiry_lt: String
+
+  """All values less than or equal the given value."""
+  resetTokenExpiry_lte: String
+
+  """All values greater than the given value."""
+  resetTokenExpiry_gt: String
+
+  """All values greater than or equal the given value."""
+  resetTokenExpiry_gte: String
+
+  """All values containing the given string."""
+  resetTokenExpiry_contains: String
+
+  """All values not containing the given string."""
+  resetTokenExpiry_not_contains: String
+
+  """All values starting with the given string."""
+  resetTokenExpiry_starts_with: String
+
+  """All values not starting with the given string."""
+  resetTokenExpiry_not_starts_with: String
+
+  """All values ending with the given string."""
+  resetTokenExpiry_ends_with: String
+
+  """All values not ending with the given string."""
+  resetTokenExpiry_not_ends_with: String
 }
 
 input UserWhereUniqueInput {
   id: ID
+  email: String
 }
