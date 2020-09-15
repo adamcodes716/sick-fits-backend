@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/adamcodes716-396934/sick-fits/dev
-# timestamp: Tue Sep 15 2020 07:59:05 GMT-0400 (Eastern Daylight Time)
+# timestamp: Tue Sep 15 2020 12:49:20 GMT-0400 (Eastern Daylight Time)
 
 type AggregateItem {
   count: Int!
